@@ -40,7 +40,7 @@
 <body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 font-sans text-gray-800 p-4 md:p-8">
 
   <div class="max-w-5xl mx-auto">
-    <!-- 頂部：雲端連線狀態條與設定按鈕 -->
+    <!-- 頂部：雲端連線狀態條 -->
     <div class="mb-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-white flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center space-x-3">
         <span class="flex h-3 w-3 relative">
@@ -48,17 +48,11 @@
           <span id="status-dot" class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
         </span>
         <p class="text-sm font-semibold text-gray-600">
-          資料儲存狀態：<span id="connection-status" class="text-blue-600 font-bold ml-1">正在初始化儲存模組... 🔌</span>
+          資料儲存狀態：<span id="connection-status" class="text-blue-600 font-bold ml-1">正在連線至雲端戀大廳... 🔌</span>
         </p>
       </div>
-      <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-        <div id="status-tip" class="text-xs text-gray-500 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-xl font-medium hidden md:block">
-          <span><b>模式提示：</b>目前為本機離線模式，角色將安全儲存在此瀏覽器中。</span>
-        </div>
-        <!-- 齒輪設定按鈕 -->
-        <button onclick="openConfigModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-sm transition-all flex items-center shadow-sm">
-          <i class="fa-solid fa-gear mr-2"></i>設定金鑰
-        </button>
+      <div id="status-tip" class="text-xs text-gray-500 bg-pink-50 border border-pink-100 px-3 py-1.5 rounded-xl font-medium hidden md:block">
+        <span><b>多人即時同步：</b>已鎖定全網共享通道，所有裝置皆可免手動輸入、免設定即時同步！</span>
       </div>
     </div>
 
@@ -148,7 +142,7 @@
           </h2>
           
           <div id="characters-list" class="space-y-3 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
-            <p class="text-gray-400 text-center py-12 text-sm font-medium">正在載入角色庫...</p>
+            <p class="text-gray-400 text-center py-12 text-sm font-medium">正在載入雲端角色庫...</p>
           </div>
         </div>
 
@@ -275,40 +269,6 @@
     </div>
   </div>
 
-  <!-- 齒輪金鑰設定 Modal -->
-  <div id="config-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-150">
-    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-150 text-left">
-      <h3 class="text-xl font-extrabold text-gray-900 mb-2 flex items-center">
-        <i class="fa-solid fa-key text-pink-500 mr-2"></i>設定 API 金鑰
-      </h3>
-      <p class="text-gray-500 text-xs mb-6 leading-relaxed">
-        為了讓您的網站能獨立運作 AI 檢定，金鑰會安全儲存在您此裝置的瀏覽器本地，我們絕對不會將其上傳到外部。
-      </p>
-
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Gemini AI 金鑰 (計算契合度用)</label>
-          <input
-            type="password"
-            id="cfg-gemini-key"
-            placeholder="請貼上您的 AI Key (AIzaSy...)"
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm bg-gray-50"
-          />
-          <p class="text-[10px] text-gray-400 mt-1">若此欄為空，檢定功能在非平台環境中將無法運作。</p>
-        </div>
-
-        <div class="border-t border-gray-100 pt-4 flex space-x-3">
-          <button onclick="closeConfigModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-xl transition-colors">
-            取消
-          </button>
-          <button onclick="saveConfigurations()" class="flex-1 py-2.5 bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold rounded-xl shadow-md transition-all">
-            儲存設定
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 引入 Firebase 模組 SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -316,7 +276,7 @@
     import { getFirestore, collection, onSnapshot, addDoc, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     // =========================================================================
-    // 💡 已安全配置您的專屬 Firebase 憑證：
+    // 💡 方案二：直接在私有程式碼中寫死您的 Firebase 雲端資料庫設定
     // =========================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyBMRFqo_sYzCUmhT8BAY_MBLbEVjclVWIo",
@@ -327,6 +287,9 @@
       appId: "1:926385227321:web:8ecf39695aa3c73f376fe8",
       measurementId: "G-YY37E55SMS"
     };
+
+    // 💡 寫死您的 Gemini AI 分析專用金鑰（這裡使用您提供的高安全級 Google API 金鑰）
+    const GEMINI_API_KEY = "AIzaSyBMRFqo_sYzCUmhT8BAY_MBLbEVjclVWIo";
     // =========================================================================
 
     const appId = 'global-love-sim-hall';
@@ -352,9 +315,6 @@
     window.startMatchmaking = startMatchmaking;
     window.showNotice = showNotice;
     window.closeNoticeModal = closeNoticeModal;
-    window.openConfigModal = openConfigModal;
-    window.closeConfigModal = closeConfigModal;
-    window.saveConfigurations = saveConfigurations;
 
     // 自訂高質感通知視窗
     function showNotice(title, message) {
@@ -365,36 +325,6 @@
 
     function closeNoticeModal() {
       document.getElementById('notice-modal').classList.add('hidden');
-    }
-
-    // --- 齒輪金鑰儲存邏輯 ---
-    function openConfigModal() {
-      // 讀取目前的金鑰填入欄位
-      const savedGeminiKey = localStorage.getItem('cfg_gemini_key') || '';
-      document.getElementById('cfg-gemini-key').value = savedGeminiKey;
-      document.getElementById('config-modal').classList.remove('hidden');
-    }
-
-    function closeConfigModal() {
-      document.getElementById('config-modal').classList.add('hidden');
-    }
-
-    function saveConfigurations() {
-      const geminiKey = document.getElementById('cfg-gemini-key').value.trim();
-      localStorage.setItem('cfg_gemini_key', geminiKey);
-      closeConfigModal();
-      showNotice("設定成功", "金鑰設定已安全保存在本地，隨時可以開始進行 AI 戀愛契合度檢定囉！");
-    }
-
-    // --- 取得當前可用的 Gemini 金鑰 ---
-    function getGeminiApiKey() {
-      // 優先序：本地 LocalStorage 設定 > 系統預設注入的空白值
-      const savedKey = localStorage.getItem('cfg_gemini_key');
-      if (savedKey && savedKey.trim()) return savedKey.trim();
-      
-      // 如果是用戶在 Canvas 或平台內，可能會有環境變數注入
-      const defaultApiKey = ""; // 系統自動注入
-      return defaultApiKey;
     }
 
     // --- 雲端連線初始化 ---
@@ -414,12 +344,12 @@
         const userCredential = await signInAnonymously(auth);
         currentUser = userCredential.user;
 
-        // 登入成功，切換至雲端模式
+        // 登入成功，切換至雲端連線狀態
         isCloudActive = true;
         statusText.innerHTML = `<span class="text-green-600 font-bold">已成功連線至雲端資料庫 🟢</span>`;
         statusDot.className = "relative inline-flex rounded-full h-3 w-3 bg-green-500";
         statusPing.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75";
-        statusTip.innerHTML = `<span><b>多人即時同步：</b>任何裝置新增或刪除角色，所有連線者畫面將同步更新！</span>`;
+        statusTip.innerHTML = `<span><b>多人同步連線中：</b>所有裝置即時同步，角色資料安全備份至雲端！</span>`;
         statusTip.className = "text-xs text-gray-500 bg-pink-50 border border-pink-100 px-3 py-1.5 rounded-xl hidden md:block";
 
         const charsRef = collection(db, 'artifacts', appId, 'public', 'data', 'characters');
@@ -431,7 +361,7 @@
             ...d.data()
           }));
 
-          // 雲端資料安全排序
+          // 雲端資料排序
           sortCharacters();
           render();
         }, (error) => {
@@ -440,7 +370,7 @@
         });
 
       } catch (err) {
-        console.warn("無法啟動雲端連線，自動切換至本機模式：", err.message);
+        console.warn("無法啟動雲端連線，自動切換至本機備份模式：", err.message);
         switchToLocalMode(statusText, statusDot, statusPing, statusTip, true);
       }
     }
@@ -454,12 +384,12 @@
         statusText.innerHTML = `<span class="text-red-500 font-bold">雲端授權失敗 ❌ (改為本機儲存)</span>`;
         statusDot.className = "relative inline-flex rounded-full h-3 w-3 bg-red-500";
         statusPing.className = "absolute inline-flex h-full w-full rounded-full bg-red-400";
-        statusTip.innerHTML = `<span><b>授權失敗：</b>請至 Firebase 後台啟用「Authentication ➡️ 匿名登入方法」。目前暫時使用本機儲存。</span>`;
+        statusTip.innerHTML = `<span><b>授權失敗：</b>請確認已在 Firebase 後台啟用「Authentication ➡️ 匿名登入方法」。</span>`;
       } else {
         statusText.innerHTML = `<span class="text-blue-600 font-bold">本機儲存模式 💾</span>`;
         statusDot.className = "relative inline-flex rounded-full h-3 w-3 bg-blue-500";
         statusPing.className = "absolute inline-flex h-full w-full rounded-full bg-blue-400";
-        statusTip.innerHTML = `<span><b>本機模式：</b>目前角色將儲存在您的本機瀏覽器。欲啟用跨裝置同步請在程式碼填入 Firebase 金鑰！</span>`;
+        statusTip.innerHTML = `<span><b>本機模式：</b>目前角色將儲存在您的本地瀏覽器。</span>`;
       }
       statusTip.className = "text-xs text-gray-500 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-xl hidden md:block";
 
@@ -706,13 +636,6 @@
         return;
       }
 
-      // 檢查金鑰
-      const geminiApiKey = getGeminiApiKey();
-      if (!geminiApiKey) {
-        showNotice("金鑰未設定", "請點擊網頁右上角的「⚙️ 設定金鑰」，並填入您的 Gemini AI 金鑰，即可開始使用 AI 的契合度檢定功能！");
-        return;
-      }
-
       if (charId1 === charId2) {
         showResults(100, "與自己相處完美契合 100%，自戀是極致的浪漫！不過若要尋找伴侶，建議選擇兩位不同的角色進行配對喔！");
         return;
@@ -772,7 +695,8 @@
           }
         };
 
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${geminiApiKey}`;
+        // 直接調用內嵌在程式碼中的 GEMINI_API_KEY，完美避開使用者手動輸入的繁雜步驟！
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
         const data = await fetchWithRetry(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -788,7 +712,7 @@
         }
       } catch (err) {
         console.error("AI 運算失敗:", err);
-        showNotice("檢定失敗", "哎呀！大宇宙戀愛電波受到干擾。請檢查右上角設定的金鑰是否有效，並確認網路狀態後再試一次！");
+        showNotice("檢定失敗", "哎呀！大宇宙戀愛電波受到干擾。請檢查網路狀態或確認 Firebase 與 Google 雲端金鑰是否配置正常後再試一次！");
       } finally {
         btn.disabled = false;
         btn.textContent = "開始計算適配度";
