@@ -257,12 +257,12 @@
 
   <!-- 系統提示客製化 Modal -->
   <div id="notice-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-150">
-    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl text-center border border-gray-100 animate-in zoom-in-95 duration-150">
-      <div class="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fa-solid fa-circle-exclamation text-2xl"></i>
+    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center border border-gray-100 animate-in zoom-in-95 duration-150">
+      <div id="notice-icon-container" class="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i id="notice-icon" class="fa-solid fa-circle-exclamation text-2xl"></i>
       </div>
       <h3 id="notice-title" class="text-xl font-bold text-gray-900 mb-2">提示訊息</h3>
-      <p id="notice-message" class="text-gray-600 mb-6 text-sm leading-relaxed"></p>
+      <div id="notice-message" class="text-gray-600 mb-6 text-sm leading-relaxed text-left whitespace-pre-wrap max-h-60 overflow-y-auto custom-scrollbar p-2 bg-gray-50 rounded-xl"></div>
       <button onclick="closeNoticeModal()" class="w-full py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-2xl shadow-lg transition-all">
         我知道了
       </button>
@@ -288,7 +288,8 @@
       measurementId: "G-YY37E55SMS"
     };
 
-    // 💡 寫死您的 Gemini AI 分析專用金鑰（這裡使用您提供的高安全級 Google API 金鑰）
+    // 💡 警告：這是專門用來呼叫 Google Gemini API 的金鑰！
+    // 之前可能誤填成了 Firebase 的 apiKey。請確保此處為從 Google AI Studio (https://aistudio.google.com/) 申請到的 API Key。
     const GEMINI_API_KEY = "AIzaSyBMRFqo_sYzCUmhT8BAY_MBLbEVjclVWIo";
     // =========================================================================
 
@@ -317,9 +318,21 @@
     window.closeNoticeModal = closeNoticeModal;
 
     // 自訂高質感通知視窗
-    function showNotice(title, message) {
+    function showNotice(title, message, isError = false) {
       document.getElementById('notice-title').textContent = title;
       document.getElementById('notice-message').textContent = message;
+      
+      const iconContainer = document.getElementById('notice-icon-container');
+      const icon = document.getElementById('notice-icon');
+      
+      if (isError) {
+        iconContainer.className = "w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4";
+        icon.className = "fa-solid fa-triangle-exclamation text-2xl";
+      } else {
+        iconContainer.className = "w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-4";
+        icon.className = "fa-solid fa-circle-exclamation text-2xl";
+      }
+      
       document.getElementById('notice-modal').classList.remove('hidden');
     }
 
@@ -682,11 +695,20 @@
         };
 
         // 指數退避重試
-        const fetchWithRetry = async (url, options, retries = 5, delay = 1000) => {
+        const fetchWithRetry = async (url, options, retries = 3, delay = 1000) => {
           for (let i = 0; i < retries; i++) {
             try {
               const res = await fetch(url, options);
-              if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+              if (!res.ok) {
+                let errMsg = `HTTP ${res.status}`;
+                try {
+                  const errJson = await res.json();
+                  if (errJson.error && errJson.error.message) {
+                    errMsg = errJson.error.message;
+                  }
+                } catch(e) {}
+                throw new Error(errMsg);
+              }
               return await res.json();
             } catch (e) {
               if (i === retries - 1) throw e;
@@ -695,7 +717,8 @@
           }
         };
 
-        // 直接調用內嵌在程式碼中的 GEMINI_API_KEY，完美避開使用者手動輸入的繁雜步驟！
+        // 呼叫 Gemini API 
+        // 💡 提示：如果預覽版 2.5 沒權限，此處模型可以直接替換成穩定量產版 'gemini-1.5-flash'
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
         const data = await fetchWithRetry(endpoint, {
           method: 'POST',
@@ -712,7 +735,17 @@
         }
       } catch (err) {
         console.error("AI 運算失敗:", err);
-        showNotice("檢定失敗", "哎呀！大宇宙戀愛電波受到干擾。請檢查網路狀態或確認 Firebase 與 Google 雲端金鑰是否配置正常後再試一次！");
+        
+        let friendlyMsg = err.message || "未知錯誤";
+        
+        // 針對常見 API Key 錯誤進行診斷與提示
+        if (friendlyMsg.includes("API key not valid") || friendlyMsg.includes("API_KEY_INVALID")) {
+          friendlyMsg = "偵測到無效的 AI 金鑰！\n\n原因：目前程式碼第 237 行的 GEMINI_API_KEY 被誤填成了「Firebase 金鑰」，或是金鑰輸入不完整。\n\n如何修正：\n1. 請前往 Google AI Studio (https://aistudio.google.com/) 申請一個免費的 Gemini API Key。\n2. 複製該金鑰（格式一樣為 AIzaSy... 開頭），並覆蓋貼上到 index.html 第 237 行的 GEMINI_API_KEY 中。\n3. 將修改後的檔案推送到您的 GitHub，即可完全打通！";
+        } else if (friendlyMsg.includes("model") || friendlyMsg.includes("not found")) {
+          friendlyMsg = `模型錯誤 (${friendlyMsg})\n\n您的金鑰可能不支援預覽模型（gemini-2.5-flash-preview-09-2025）。\n\n解決方法：請將 index.html 裡面第 500 行的 API 網址中的模型名稱修改為穩定版「gemini-1.5-flash」後，推送到 GitHub 即可！`;
+        }
+        
+        showNotice("AI 檢定失敗", friendlyMsg, true);
       } finally {
         btn.disabled = false;
         btn.textContent = "開始計算適配度";
