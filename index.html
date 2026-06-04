@@ -1,583 +1,1213 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>人物適配戀愛模擬器 (終極獨立版)</title>
+
   <!-- 導入 Tailwind CSS -->
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- 導入 FontAwesome 圖標 -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
+
     @keyframes heartBeat {
+
       0% { transform: scale(1); }
+
       14% { transform: scale(1.12); }
+
       28% { transform: scale(1); }
+
       42% { transform: scale(1.12); }
+
       70% { transform: scale(1); }
+
     }
+
     .animate-heart-beat { animation: heartBeat 1.5s infinite; }
+
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+
     .custom-scrollbar::-webkit-scrollbar-track { background: rgba(243, 244, 246, 0.5); border-radius: 99px; }
+
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(244, 114, 182, 0.4); border-radius: 99px; }
+
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(244, 114, 182, 0.6); }
+
   </style>
+
 </head>
+
 <body class="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 font-sans text-gray-800 p-4 md:p-8">
 
+
+
   <div class="max-w-5xl mx-auto">
+
     <!-- 頂部狀態列 -->
+
     <div class="mb-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-white flex flex-col sm:flex-row items-center justify-between gap-4">
+
       <div class="flex items-center space-x-3">
+
         <span class="flex h-3 w-3 relative">
+
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+
           <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+
         </span>
+
         <p class="text-sm font-semibold text-gray-600">
+
           系統狀態：<span class="text-green-600 font-bold ml-1">內建大數據邏輯引擎運作中 🚀</span>
+
         </p>
+
       </div>
+
       <div class="text-xs text-gray-500 bg-pink-50 border border-pink-100 px-3 py-1.5 rounded-xl font-medium hidden md:block">
+
         <span><b>終極離線版：</b>無需任何金鑰、無使用限制、極速運算，資料安全保存在您的裝置！</span>
+
       </div>
+
     </div>
 
+
+
     <!-- 標題欄 -->
+
     <header class="mb-8 text-center space-y-3">
+
       <div class="inline-flex items-center justify-center p-4 bg-white rounded-full shadow-lg mb-2">
+
         <i class="fa-solid fa-heart text-pink-500 text-5xl animate-heart-beat"></i>
+
       </div>
+
       <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 tracking-tight">
+
         人物適配戀愛模擬器
+
       </h1>
+
       <p class="text-gray-500 max-w-2xl mx-auto text-sm md:text-base font-medium">
+
         建立專屬角色庫，賦予他們獨特的個性，系統將透過內建「巨量心理學演算法」為您極速解析契合度！
+
       </p>
+
     </header>
 
+
+
     <!-- 主要區塊：左右分欄 -->
+
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
       
+
       <!-- 左側欄：角色建立與角色池 -->
+
       <div class="lg:col-span-5 space-y-6">
+
         
+
         <!-- 卡片一：創造新角色 -->
+
         <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-white">
+
           <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+
             <i class="fa-solid fa-user-plus mr-2 text-pink-500"></i>創造新角色
+
           </h2>
+
           
+
           <div class="space-y-4">
+
             <div>
+
               <label class="block text-sm font-semibold text-gray-600 mb-1">角色名字</label>
+
               <input type="text" id="char-name" placeholder="例如：小明、雷姆、大雄..." class="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/50 transition-all" />
-            </div>
-            
-            <div>
-              <label class="block text-sm font-semibold text-gray-600 mb-1">新增個性特質（無限制數量）</label>
-              <div class="flex space-x-2">
-                <input type="text" id="trait-input" placeholder="例如：傲嬌、溫柔、愛生氣..." class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/50 transition-all" onkeydown="if(event.key === 'Enter') addTraitFromInput()" />
-                <button onclick="addTraitFromInput()" class="px-5 py-3 bg-pink-100 text-pink-600 rounded-2xl hover:bg-pink-200 transition-colors font-bold text-sm">新增</button>
-              </div>
+
             </div>
 
-            <div id="temp-traits-container" class="flex flex-wrap gap-2 min-h-[50px] p-3 bg-gray-50/50 rounded-2xl border border-gray-100">
-              <span class="text-xs text-gray-400 italic m-auto">尚未輸入個性...</span>
+            
+
+            <div>
+
+              <label class="block text-sm font-semibold text-gray-600 mb-1">新增個性特質（無限制數量）</label>
+
+              <div class="flex space-x-2">
+
+                <input type="text" id="trait-input" placeholder="例如：傲嬌、溫柔、愛生氣..." class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/50 transition-all" onkeydown="if(event.key === 'Enter') addTraitFromInput()" />
+
+                <button onclick="addTraitFromInput()" class="px-5 py-3 bg-pink-100 text-pink-600 rounded-2xl hover:bg-pink-200 transition-colors font-bold text-sm">新增</button>
+
+              </div>
+
             </div>
+
+
+
+            <div id="temp-traits-container" class="flex flex-wrap gap-2 min-h-[50px] p-3 bg-gray-50/50 rounded-2xl border border-gray-100">
+
+              <span class="text-xs text-gray-400 italic m-auto">尚未輸入個性...</span>
+
+            </div>
+
+
 
             <div id="error-msg" class="hidden text-sm text-red-500 bg-red-50 p-3 rounded-2xl text-center border border-red-100 animate-pulse font-medium"></div>
 
+
+
             <button onclick="saveCharacter()" class="w-full py-3.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all text-base">
+
               加入角色池
+
             </button>
+
           </div>
+
         </div>
+
+
 
         <!-- 卡片二：角色池 -->
+
         <div class="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-white">
+
           <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center justify-between">
+
             <span class="flex items-center"><i class="fa-solid fa-database mr-2 text-purple-500"></i>本機大型資料庫</span>
+
             <span id="char-count" class="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold">0</span>
+
           </h2>
+
           
+
           <div id="characters-list" class="space-y-3 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
+
             <!-- 角色列表動態產生 -->
+
           </div>
+
         </div>
+
       </div>
+
+
 
       <!-- 右側欄：適配度計算與大師分析 -->
+
       <div class="lg:col-span-7 space-y-6">
+
         
+
         <!-- 計算卡片 -->
+
         <div class="bg-white/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl shadow-2xl border border-white/50">
+
           <h2 class="text-2xl font-bold mb-8 text-center text-gray-800 flex items-center justify-center">
+
             <i class="fa-solid fa-wand-magic-sparkles text-yellow-500 mr-2"></i>
+
             靈魂適配度檢定
+
             <i class="fa-solid fa-wand-magic-sparkles text-yellow-500 ml-2"></i>
+
           </h2>
 
+
+
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+
             <!-- 角色 A -->
+
             <div class="w-full sm:w-2/5">
+
               <label class="block text-sm font-bold text-pink-500 mb-2 text-center">角色 A</label>
+
               <div class="relative">
+
                 <select id="select-char-1" onchange="updateCharPreview(1)" class="w-full appearance-none px-4 py-3.5 rounded-2xl border-2 border-pink-200 bg-pink-50/50 focus:outline-none focus:border-pink-500 text-gray-700 font-bold cursor-pointer">
+
                   <option value="">選擇角色...</option>
+
                 </select>
+
                 <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+
               </div>
+
               <div id="preview-traits-1" class="mt-3 text-center text-xs text-gray-500 h-10 overflow-hidden text-ellipsis font-medium"></div>
+
             </div>
+
+
 
             <div class="w-full sm:w-1/5 flex justify-center py-4 sm:py-0">
+
               <div class="bg-gradient-to-br from-pink-100 to-purple-100 rounded-full p-4 shadow-inner">
+
                 <i id="calc-heart" class="fa-solid fa-heart text-pink-400 text-3xl"></i>
+
               </div>
+
             </div>
+
+
 
             <!-- 角色 B -->
+
             <div class="w-full sm:w-2/5">
+
               <label class="block text-sm font-bold text-purple-500 mb-2 text-center">角色 B</label>
+
               <div class="relative">
+
                 <select id="select-char-2" onchange="updateCharPreview(2)" class="w-full appearance-none px-4 py-3.5 rounded-2xl border-2 border-purple-200 bg-purple-50/50 focus:outline-none focus:border-purple-500 text-gray-700 font-bold cursor-pointer">
+
                   <option value="">選擇角色...</option>
+
                 </select>
+
                 <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+
               </div>
+
               <div id="preview-traits-2" class="mt-3 text-center text-xs text-gray-500 h-10 overflow-hidden text-ellipsis font-medium"></div>
+
             </div>
+
           </div>
+
+
 
           <div class="text-center">
+
             <button id="btn-calculate" onclick="startMatchmaking()" class="px-8 py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all w-full sm:w-auto min-w-[220px]">
+
               開始計算適配度
+
             </button>
+
           </div>
+
         </div>
+
+
 
         <!-- 結果卡片 -->
+
         <div id="result-card" class="hidden bg-white p-8 rounded-3xl shadow-2xl border-2 border-pink-100 animate-fade-in">
+
           <div class="text-center mb-6">
+
             <h3 class="text-lg font-bold text-gray-500 mb-2">最終契合指數</h3>
+
             <div class="flex items-center justify-center space-x-1">
+
               <span id="result-score" class="text-7xl md:text-8xl font-black text-pink-500 tracking-tighter drop-shadow-md">0</span>
+
               <span class="text-4xl font-bold text-pink-500">%</span>
+
             </div>
+
             <div class="w-full max-w-md mx-auto mt-6 bg-gray-100 rounded-full h-4 overflow-hidden shadow-inner">
+
               <div id="result-progress" class="h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full transition-all duration-1000" style="width: 0%"></div>
+
             </div>
+
           </div>
+
+
 
           <div class="bg-pink-50/50 p-6 rounded-2xl border border-pink-100">
+
             <h4 class="text-pink-600 font-bold mb-3 flex items-center">
+
               <i class="fa-solid fa-sparkles mr-2 text-yellow-500"></i>系統邏輯深度分析
+
             </h4>
+
             <p id="result-reason" class="text-gray-700 leading-relaxed text-justify whitespace-pre-wrap font-medium text-[15px]"></p>
+
           </div>
+
         </div>
 
+
+
       </div>
+
     </div>
+
   </div>
+
+
 
   <!-- 刪除確認 Modal 彈窗 -->
+
   <div id="delete-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+
     <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center border border-gray-100 animate-in zoom-in-95 duration-150">
+
       <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+
         <i class="fa-solid fa-trash-can text-2xl"></i>
+
       </div>
+
       <h3 class="text-xl font-bold text-gray-900 mb-2">確定要刪除此角色嗎？</h3>
+
       <p class="text-gray-600 mb-6 text-sm">此動作將從您的角色庫中永久移除「<span id="delete-char-name" class="font-bold text-red-500"></span>」。</p>
+
       <div class="flex space-x-3">
+
         <button onclick="closeDeleteModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-colors">取消</button>
+
         <button id="btn-confirm-delete" class="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-2xl shadow-lg transition-all">確認刪除</button>
+
       </div>
+
     </div>
+
   </div>
 
+
+
   <script>
+
     // =========================================================================
+
     // 💡 內建巨型預設角色資料庫 (Initial Database)
+
     // =========================================================================
+
     const initialDatabase = [
+
       { id: 'c01', name: '桐人', traits: ['溫柔', '強大', '守護', '稍微遲鈍', '專情'] },
+
       { id: 'c02', name: '亞絲娜', traits: ['賢慧', '堅強', '大小姐', '善解人意', '擅長料理'] },
+
       { id: 'c03', name: '五條悟', traits: ['無敵', '輕浮', '愛吃甜食', '自信', '幽默'] },
+
       { id: 'c04', name: '雷姆', traits: ['毒舌', '全能女僕', '病嬌', '極度專情', '溫柔'] },
+
       { id: 'c05', name: '愛蜜莉雅', traits: ['善良', '天然呆', '不坦率', '努力家', '天使'] },
+
       { id: 'c06', name: '炭治郎', traits: ['極度溫柔', '顧家', '有禮貌', '堅毅', '頭很硬'] },
+
       { id: 'c07', name: '彌豆子', traits: ['可愛', '保護家人', '嗜睡', '安靜'] },
+
       { id: 'c08', name: '阿尼亞', traits: ['超能力', '顏藝', '愛吃花生', '好奇心旺盛', '活潑'] },
+
       { id: 'c09', name: '黃昏 (洛伊德)', traits: ['完美主義', '冷靜', '傲嬌', '家事萬能', '間諜'] },
+
       { id: 'c10', name: '約兒', traits: ['天然黑', '武力天花板', '料理白癡', '害羞', '溫柔'] },
+
       { id: 'c11', name: '初音未來', traits: ['熱愛唱歌', '元氣', '虛擬偶像', '雙馬尾', '蔥'] },
+
       { id: 'c12', name: '大雄', traits: ['善良', '愛哭', '懶惰', '神槍手', '翻花繩天才'] },
+
       { id: 'c13', name: '哆啦A夢', traits: ['怕老鼠', '愛吃銅鑼燒', '可靠', '萬能道具', '愛碎碎念'] },
+
       { id: 'c14', name: '魯夫', traits: ['吃貨', '熱血', '白癡', '極度重感情', '自由'] },
+
       { id: 'c15', name: '娜美', traits: ['愛錢', '聰明', '暴力', '航海天才', '重視夥伴'] },
+
       { id: 'c16', name: '索隆', traits: ['路痴', '武士道', '愛睡覺', '硬漢', '愛喝酒'] },
+
       { id: 'c17', name: '香吉士', traits: ['騎士道', '好色', '料理天才', '紳士', '傲嬌'] },
+
       { id: 'c18', name: '胡桃', traits: ['古靈精怪', '推銷員', '幽默', '樂觀', '隱藏的溫柔'] },
+
       { id: 'c19', name: '芙莉蓮', traits: ['長壽', '慵懶', '魔法使', '愛收集廢物', '面癱'] },
+
       { id: 'c20', name: '欣梅爾', traits: ['自戀', '勇者', '純情', '極度溫柔', '帥氣'] }
+
     ];
 
+
+
     // =========================================================================
+
     // 🧠 內建演算法生成引擎 (Procedural AI Logic Engine)
+
     // 結合亂數雜湊、關鍵字比對、範本組合的巨量文字生成系統
+
     // =========================================================================
+
     const AIEngine = {
+
       // 雜湊函數：根據名字與特質產生固定的隨機種子，確保相同角色配對分數固定
+
       hashString: function(str) {
+
         let hash = 0;
+
         for (let i = 0; i < str.length; i++) {
+
           hash = (hash << 5) - hash + str.charCodeAt(i);
+
           hash |= 0; 
+
         }
+
         return Math.abs(hash);
+
       },
 
+
+
       // 產生報告
+
       generateReport: function(char1, char2) {
+
         // 如果是同一個人
+
         if (char1.id === char2.id) {
+
           return {
+
             score: 100,
+
             reason: "【水仙花之戀的終極浪漫】\n心理學上，最高級的愛往往始於自愛。兩人的靈魂契合度毫無疑問達到了 100% 的完美境界！您與自己擁有完全相同的價值觀與步調，沒有任何摩擦，堪稱靈魂伴侶的最佳典範。不過大師建議，如果要體驗戀愛的火花與成長，不妨嘗試選擇兩位不同的角色進行配對，探索未知的化學反應喔！"
+
           };
+
         }
+
+
 
         // 取出特質
+
         const t1 = char1.traits;
+
         const t2 = char2.traits;
+
         const allTraits = [...t1, ...t2];
+
         const combinedString = [char1.name, ...t1].sort().join('') + [char2.name, ...t2].sort().join('');
+
         const seed = this.hashString(combinedString);
 
+
+
         // 1. 計算分數 (0-100)
+
         let baseScore = (seed % 61) + 40; // 基礎分數 40-100
+
         
+
         // 特質加成運算 (找尋互補或相似)
+
         let matchPoints = 0;
+
         let conflictPoints = 0;
+
         let specialDynamics = "";
 
+
+
         const positiveMatches = ['溫柔', '善良', '顧家', '專情', '守護', '堅強', '樂觀'];
+
         const clashTraits = ['傲嬌', '毒舌', '自我', '暴力', '暴躁', '輕浮', '懶惰'];
 
+
+
         // 尋找相似性
+
         t1.forEach(trait => {
+
           if (t2.includes(trait)) {
+
             matchPoints += 10;
+
             specialDynamics += `雙方都具有「${trait}」的特質，這讓兩人在價值觀上有著天然的共鳴，很容易理解彼此的想法。`;
+
           }
+
         });
 
+
+
         // 互補或衝突
+
         const hasT1Clash = t1.some(t => clashTraits.includes(t));
+
         const hasT2Clash = t2.some(t => clashTraits.includes(t));
+
         const hasT1Positive = t1.some(t => positiveMatches.includes(t));
+
         const hasT2Positive = t2.some(t => positiveMatches.includes(t));
 
+
+
         if (hasT1Clash && hasT1Clash) {
+
           conflictPoints += 15;
+
           specialDynamics += `不過，由於雙方性格中都有較為強勢或固執的一面，在吵架時可能會上演互不相讓的戲碼，需要學會互相退讓。`;
+
         } else if ((hasT1Clash && hasT2Positive) || (hasT2Clash && hasT1Positive)) {
+
           matchPoints += 15;
+
           specialDynamics += `非常有趣的是，一方的尖銳或不坦率，剛好能被另一方的溫柔與包容完美化解，形成了一種「一物降一物」的絕佳互補狀態。`;
+
         }
+
+
 
         // 最終分數調整
+
         let finalScore = baseScore + matchPoints - conflictPoints;
+
         if (finalScore > 99) finalScore = 99 - (seed % 3); // 最高留一點玄念
+
         if (finalScore < 10) finalScore = 12 + (seed % 10);
+
         
+
         // 2. 組合生成長篇分析文字
+
         const intros = [
+
           `根據系統深度的性格解構模組分析，${char1.name} 與 ${char2.name} 的組合充滿了戲劇性與張力。`,
+
           `從心理學的「人際吸引法則」來看，${char1.name} 與 ${char2.name} 之間的化學反應非常值得玩味。`,
+
           `將 ${char1.name} 和 ${char2.name} 放在一起，就像是將兩種截然不同的化學元素混合。`
+
         ];
+
+
 
         let bodyText = "";
+
         if (finalScore >= 80) {
+
           const highBodies = [
+
             `這絕對是命中注定的天作之合！${char1.name} 的 (${t1.slice(0,2).join('、')}) 能夠完美呼應 ${char2.name} 內心的渴望。雙方在交往中不僅能給予對方極大的安全感，還能在平淡的日常中創造無限的浪漫與驚喜。`,
+
             `兩人之間存在著強烈的靈魂羈絆。雖然 ${char1.name} 有著獨特的個性，但 ${char2.name} 具備的 (${t2.slice(0,2).join('、')}) 卻能輕易突破對方的心防。這段關係中充滿了信任與依賴，幾乎沒有什麼能將他們分開。`
+
           ];
+
           bodyText = highBodies[seed % highBodies.length];
+
         } else if (finalScore >= 50) {
+
           const midBodies = [
+
             `這對組合屬於「歡喜冤家」的類型。${char1.name} 展現出的 (${t1.slice(0,2).join('、')}) 有時會讓 ${char2.name} 感到無奈，但 ${char2.name} 身上的 (${t2.slice(0,2).join('、')}) 卻又深深吸引著對方。`,
+
             `兩人的關係充滿了成長的空間。初期的磨合期可能較長，因為 ${char1.name} 和 ${char2.name} 在思維模式上存在差異。但只要願意花時間溝通，這份感情會隨著時間越陳越香，轉化為深沉的愛意。`
+
           ];
+
           bodyText = midBodies[seed % midBodies.length];
+
         } else {
+
           const lowBodies = [
+
             `這是一段充滿挑戰的坎坷情路。${char1.name} 強烈的 (${t1[0] || '個人風格'}) 很容易與 ${char2.name} 的 (${t2[0] || '堅持'}) 產生摩擦。雙方就像是兩顆互相排斥的磁鐵，如果要修成正果，必須要有極大的耐心去包容對方的缺點。`,
+
             `相愛容易相處難，用在這對組合上再適合不過了。${char1.name} 與 ${char2.name} 雖然可能會因為一時的火花而互相吸引，但在長期的柴米油鹽中，性格本質上的差異將會引爆不少衝突，是一場艱辛的戀愛修行。`
+
           ];
+
           bodyText = lowBodies[seed % lowBodies.length];
+
         }
 
+
+
         const conclusions = [
+
           `【大師建議】：談戀愛沒有絕對的公式，多發掘對方的優點，有時候意想不到的火花就是在摩擦中誕生的！`,
+
           `【總結】：分數只是參考，真正決定兩人能走多遠的，永遠是願意為了對方改變與付出的那顆心。`,
+
           `【最終點評】：這對配對充滿了故事性，若真的在一起，每天的生活絕對不會無聊，請好好珍惜這段特別的緣分！`
+
         ];
+
+
 
         const reason = `${intros[seed % intros.length]}\n\n${bodyText}\n\n${specialDynamics}\n\n${conclusions[seed % conclusions.length]}`;
 
+
+
         return { score: finalScore, reason: reason };
+
       }
+
     };
 
+
+
     // =========================================================================
+
     // 網頁應用程式邏輯
+
     // =========================================================================
+
     let characters = [];
+
     let currentTraits = [];
+
     let deleteTargetId = null;
 
+
+
     // 系統初始化
+
     window.onload = function() {
+
       // 1. 嘗試從 localStorage 讀取
+
       const saved = localStorage.getItem('love_sim_chars_v2');
+
       if (saved) {
+
         try {
+
           characters = JSON.parse(saved);
+
         } catch (e) {
+
           characters = [];
+
         }
+
       }
+
       
+
       // 2. 如果是完全空的 (第一次開啟)，載入大型預設資料庫
+
       if (characters.length === 0) {
+
         characters = [...initialDatabase];
+
         // 加上建立時間以便排序
+
         characters.forEach(c => c.createdAt = Date.now() - Math.random() * 100000); 
+
       }
+
+
 
       sortCharacters();
+
       render();
+
     };
 
+
+
     function sortCharacters() {
+
       characters.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
     }
+
+
 
     // --- 畫面渲染 ---
+
     function render() {
+
       const listContainer = document.getElementById('characters-list');
+
       const countLabel = document.getElementById('char-count');
+
       countLabel.textContent = characters.length;
 
+
+
       if (characters.length === 0) {
+
         listContainer.innerHTML = `<p class="text-gray-400 text-center py-12 text-sm font-medium">目前沒有角色，趕快在上方創造吧！</p>`;
+
       } else {
+
         listContainer.innerHTML = '';
+
         characters.forEach(char => {
+
           const charEl = document.createElement('div');
+
           charEl.className = "p-4 bg-white/60 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex justify-between items-start group animate-fade-in";
+
           
+
           const traitsBadges = char.traits.map(t => `<span class="text-xs px-2.5 py-1 bg-purple-50 text-purple-600 rounded-lg font-semibold">${t}</span>`).join(' ');
 
+
+
           charEl.innerHTML = `
+
             <div class="flex-1 mr-2">
+
               <div class="font-bold text-gray-800 text-base">${char.name}</div>
+
               <div class="flex flex-wrap gap-1.5 mt-2.5">${traitsBadges}</div>
+
             </div>
+
             <button onclick="openDeleteModal('${char.id}', '${char.name}')" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors md:opacity-0 group-hover:opacity-100 focus:opacity-100">
+
               <i class="fa-solid fa-trash-can text-sm"></i>
+
             </button>
+
           `;
+
           listContainer.appendChild(charEl);
+
         });
+
       }
+
+
 
       // 更新下拉選單
+
       const select1 = document.getElementById('select-char-1');
+
       const select2 = document.getElementById('select-char-2');
+
       const val1 = select1.value;
+
       const val2 = select2.value;
 
+
+
       // 按照字母或拼音順序排序下拉選單會更好找
+
       const sortedForDropdown = [...characters].sort((a, b) => a.name.localeCompare(b.name, 'zh-TW'));
+
       const optionsHtml = `<option value="">選擇角色...</option>` + sortedForDropdown.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
       
+
       select1.innerHTML = optionsHtml;
+
       select2.innerHTML = optionsHtml;
 
+
+
       if (characters.some(c => c.id === val1)) select1.value = val1;
+
       if (characters.some(c => c.id === val2)) select2.value = val2;
 
+
+
       updateCharPreview(1);
+
       updateCharPreview(2);
 
+
+
       // 本地存檔備份
+
       localStorage.setItem('love_sim_chars_v2', JSON.stringify(characters));
+
     }
+
+
 
     // --- 新增角色流程 ---
+
     function addTraitFromInput() {
+
       const input = document.getElementById('trait-input');
+
       const value = input.value.trim();
+
       const errorMsg = document.getElementById('error-msg');
+
       errorMsg.classList.add('hidden');
 
+
+
       if (!value) return;
+
       if (currentTraits.includes(value)) {
+
         showError("此個性特質已經存在囉！");
+
         return;
+
       }
+
       currentTraits.push(value);
+
       input.value = '';
+
       renderTempTraits();
+
     }
+
+
 
     function renderTempTraits() {
+
       const container = document.getElementById('temp-traits-container');
+
       if (currentTraits.length === 0) {
+
         container.innerHTML = `<span class="text-xs text-gray-400 italic m-auto">尚未輸入個性...</span>`;
+
         return;
+
       }
+
       container.innerHTML = currentTraits.map((t, idx) => `
+
         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-pink-100 text-pink-700 font-semibold shadow-sm animate-fade-in">
+
           ${t}
+
           <button onclick="removeTempTrait(${idx})" class="ml-2 hover:text-pink-950 focus:outline-none flex items-center">
+
             <i class="fa-solid fa-xmark text-xs"></i>
+
           </button>
+
         </span>
+
       `).join('');
+
     }
+
+
 
     function removeTempTrait(idx) {
+
       currentTraits.splice(idx, 1);
+
       renderTempTraits();
+
     }
+
+
 
     function saveCharacter() {
+
       const nameInput = document.getElementById('char-name');
+
       const name = nameInput.value.trim();
 
+
+
       if (!name) { showError("請先輸入角色名字唷！"); return; }
+
       if (currentTraits.length === 0) { showError("請至少為角色新增一個個性特質！"); return; }
 
+
+
       const newChar = {
+
         id: 'local_' + Date.now().toString() + Math.random().toString(36).substring(2, 9),
+
         name: name,
+
         traits: [...currentTraits],
+
         createdAt: Date.now()
+
       };
+
       
+
       characters.unshift(newChar);
+
       nameInput.value = '';
+
       currentTraits = [];
+
       renderTempTraits();
+
       hideError();
+
       render();
+
     }
+
+
 
     function showError(text) {
+
       const errorMsg = document.getElementById('error-msg');
+
       errorMsg.textContent = text;
+
       errorMsg.classList.remove('hidden');
+
     }
+
     function hideError() { document.getElementById('error-msg').classList.add('hidden'); }
 
+
+
     // --- 刪除角色流程 ---
+
     function openDeleteModal(id, name) {
+
       deleteTargetId = id;
+
       document.getElementById('delete-char-name').textContent = name;
+
       document.getElementById('delete-modal').classList.remove('hidden');
+
       
+
       document.getElementById('btn-confirm-delete').onclick = function() {
+
         characters = characters.filter(c => c.id !== deleteTargetId);
+
         
+
         const select1 = document.getElementById('select-char-1');
+
         const select2 = document.getElementById('select-char-2');
+
         if (select1.value === deleteTargetId) select1.value = '';
+
         if (select2.value === deleteTargetId) select2.value = '';
 
+
+
         closeDeleteModal();
+
         render();
+
       };
+
     }
+
     function closeDeleteModal() {
+
       document.getElementById('delete-modal').classList.add('hidden');
+
       deleteTargetId = null;
+
     }
+
+
 
     // --- 下拉預覽 ---
+
     function updateCharPreview(slot) {
+
       const select = document.getElementById(`select-char-${slot}`);
+
       const preview = document.getElementById(`preview-traits-${slot}`);
+
       const selectedId = select.value;
+
       if (!selectedId) { preview.textContent = ''; return; }
+
       const char = characters.find(c => c.id === selectedId);
+
       if (char) preview.textContent = "特性：" + char.traits.join('、');
+
     }
 
+
+
     // --- AI 契合度檢測 (本機演算法引擎) ---
+
     function startMatchmaking() {
+
       const charId1 = document.getElementById('select-char-1').value;
+
       const charId2 = document.getElementById('select-char-2').value;
 
+
+
       if (!charId1 || !charId2) {
+
         alert("請先選擇兩位角色進行適配檢定！");
+
         return;
+
       }
 
+
+
       const char1 = characters.find(c => c.id === charId1);
+
       const char2 = characters.find(c => c.id === charId2);
 
+
+
+      const btn = document.getElementById('btn-calculate');
+
+      const heart = document.getElementById('calc-heart');
+
+      
+
+      // 模擬 AI 思考的特效
+
+      btn.disabled = true;
+
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> 系統演算法深度分析中...`;
+
+      heart.classList.add('animate-heart-beat', 'text-pink-600');
+
+      document.getElementById('result-card').classList.add('hidden');
+
+
+
+      // 假裝延遲 1.5 秒，營造大數據運算的高級感
+
+      setTimeout(() => {
+
+        const result = AIEngine.generateReport(char1, char2);
+
+        showResults(result.score, result.reason);
+
+        
+
+        btn.disabled = false;
+
+        btn.textContent = "開始計算適配度";
+
+        heart.classList.remove('animate-heart-beat', 'text-pink-600');
+
+      }, 1500);
+
+    }
+
+
+
+    function showResults(score, reason) {
+
+      const card = document.getElementById('result-card');
+
+      const scoreTxt = document.getElementById('result-score');
+
+      const bar = document.getElementById('result-progress');
+
+      const reasonTxt = document.getElementById('result-reason');
+
+
+
+      scoreTxt.className = "text-7xl md:text-8xl font-black tracking-tighter drop-shadow-md transition-all duration-300";
+
+      if (score >= 80) scoreTxt.classList.add('text-pink-500');
+
+      else if (score >= 50) scoreTxt.classList.add('text-purple-500');
+
+      else scoreTxt.classList.add('text-indigo-500');
+
+
+
+      // 數字跳動動畫效果
+
+      let currentScore = 0;
+
+      const timer = setInterval(() => {
+
+        currentScore += Math.ceil(score / 20);
+
+        if (currentScore >= score) {
+
+          currentScore = score;
+
+          clearInterval(timer);
+
+        }
+
+        scoreTxt.textContent = currentScore;
+
+      }, 30);
+
+
+
+      reasonTxt.textContent = reason;
+
+      card.classList.remove('hidden');
+
+
+
+      setTimeout(() => { bar.style.width = `${score}%`; }, 100);
+
+    }
+
+  </script>
+
+</body>
+
+</html>
+const char1 = characters.find(c => c.id === charId1);
+      const char2 = characters.find(c => c.id === charId2);
+      
       const btn = document.getElementById('btn-calculate');
       const heart = document.getElementById('calc-heart');
       
-      // 模擬 AI 思考的特效
+      // 顯示演算中狀態
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> 系統演算法深度分析中...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> 正在演算...`;
       heart.classList.add('animate-heart-beat', 'text-pink-600');
       document.getElementById('result-card').classList.add('hidden');
 
-      // 假裝延遲 1.5 秒，營造大數據運算的高級感
+      // 使用 setTimeout 模擬處理延遲，讓 UX 更自然
       setTimeout(() => {
         const result = AIEngine.generateReport(char1, char2);
-        showResults(result.score, result.reason);
+        showResults(result);
         
         btn.disabled = false;
         btn.textContent = "開始計算適配度";
         heart.classList.remove('animate-heart-beat', 'text-pink-600');
-      }, 1500);
+      }, 600);
     }
 
-    function showResults(score, reason) {
+    function showResults(result) {
       const card = document.getElementById('result-card');
       const scoreTxt = document.getElementById('result-score');
       const bar = document.getElementById('result-progress');
       const reasonTxt = document.getElementById('result-reason');
 
-      scoreTxt.className = "text-7xl md:text-8xl font-black tracking-tighter drop-shadow-md transition-all duration-300";
-      if (score >= 80) scoreTxt.classList.add('text-pink-500');
-      else if (score >= 50) scoreTxt.classList.add('text-purple-500');
-      else scoreTxt.classList.add('text-indigo-500');
-
-      // 數字跳動動畫效果
-      let currentScore = 0;
-      const timer = setInterval(() => {
-        currentScore += Math.ceil(score / 20);
-        if (currentScore >= score) {
-          currentScore = score;
-          clearInterval(timer);
-        }
-        scoreTxt.textContent = currentScore;
-      }, 30);
-
-      reasonTxt.textContent = reason;
+      // 設定分數與顏色
+      scoreTxt.textContent = result.score;
+      scoreTxt.className = `text-7xl md:text-8xl font-black tracking-tighter drop-shadow-md transition-all ${
+        result.score >= 80 ? 'text-pink-500' : result.score >= 50 ? 'text-purple-500' : 'text-indigo-500'
+      }`;
+      
+      reasonTxt.textContent = result.reason;
       card.classList.remove('hidden');
 
-      setTimeout(() => { bar.style.width = `${score}%`; }, 100);
+      // 觸發進度條動畫
+      bar.style.width = '0%';
+      setTimeout(() => {
+        bar.style.width = `${result.score}%`;
+      }, 100);
     }
   </script>
 </body>
